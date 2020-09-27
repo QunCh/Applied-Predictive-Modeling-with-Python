@@ -6,7 +6,7 @@ from CRAN and converts .RData files to .csv files.
 '''
 
 import os
-from urllib import urlopen
+from urllib.request import urlopen
 import tarfile
 import shutil
 import pandas as pd
@@ -28,17 +28,17 @@ def mkdir_dataset():
     datasets_folder = os.path.abspath(os.path.join(here, 'datasets'))
 
     if not os.path.exists(datasets_folder):
-        print "Creating datasets folder: " + datasets_folder
+        print( "Creating datasets folder: " + datasets_folder)
         os.makedirs(datasets_folder)
     else:
-        print "Using existing datasets folder:" + datasets_folder
+        print( "Using existing datasets folder:" + datasets_folder)
 
     return datasets_folder
 
 def download_pack(datasets_folder):
     '''download R package from CRAN'''
     # download APM
-    print "Downloading AppliedPredictiveModeling from %s (2 MB)" % APM_URL
+    print( "Downloading AppliedPredictiveModeling from %s (2 MB)" % APM_URL)
 
     archive_path = os.path.join(datasets_folder, APM_ARCHIVE)
     file_path = os.path.join(datasets_folder, APM_NAME)
@@ -46,17 +46,17 @@ def download_pack(datasets_folder):
     opener = urlopen(APM_URL)
     open(archive_path, 'wb').write(opener.read())
 
-    print "Decomposing %s" % archive_path
+    print( "Decomposing %s" % archive_path)
 
     tarfile.open(archive_path, "r:gz").extractall(path=datasets_folder)
 
-    print "Checking that the AppliedPredictiveModeling file exists..."
+    print( "Checking that the AppliedPredictiveModeling file exists...")
     assert os.path.exists(file_path)
-    print "=> Success!"
+    print( "=> Success!")
     os.remove(archive_path)
 
     # download Caret
-    print "Downloading Caret from %s (2 MB)" % CRT_URL
+    print( "Downloading Caret from %s (2 MB)" % CRT_URL)
 
     archive_path = os.path.join(datasets_folder, CRT_ARCHIVE)
     file_path = os.path.join(datasets_folder, CRT_NAME)
@@ -64,18 +64,18 @@ def download_pack(datasets_folder):
     opener = urlopen(CRT_URL)
     open(archive_path, 'wb').write(opener.read())
 
-    print "Decomposing %s" % archive_path
+    print( "Decomposing %s" % archive_path)
 
     tarfile.open(archive_path, "r:gz").extractall(path=datasets_folder)
 
-    print "Checking that the Caret file exists..."
+    print( "Checking that the Caret file exists...")
     assert os.path.exists(file_path)
-    print "=> Success!"
+    print( "=> Success!")
     os.remove(archive_path)
 
 def get_datafiles(datasets_folder):
     '''extract data files from the downloaded package'''
-    print "Extract .RData files from the packages..."
+    print( "Extract .RData files from the packages...")
 
     # from APM
     src_path = os.path.join(datasets_folder, APM_NAME, 'data/.')
@@ -122,7 +122,7 @@ def get_datafiles(datasets_folder):
 
 def convert_datafiles(datasets_folder):
     '''convert .RData files to .csv files and clean up'''
-    print "Convert .RData to .csv and clean up files..."
+    print( "Convert .RData to .csv and clean up files...")
 
     for root, dirs, files in os.walk(datasets_folder):
         for name in files:
@@ -145,7 +145,7 @@ def convert_datafiles(datasets_folder):
                     myRData.to_csv(var_path)
                 os.remove(os.path.join(datasets_folder, name)) # clean up
 
-    print "=> Success!"
+    print( "=> Success!")
 
 if __name__ == "__main__":
     datasets_folder = mkdir_dataset()
