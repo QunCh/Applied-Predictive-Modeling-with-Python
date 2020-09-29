@@ -3,4 +3,4 @@ result = pyreadr.read_r(r'C:\Users\qunch\Documents\GitHub\AppliedPredictiveModel
 result.keys()
 data = result['segmentationOriginal']
 data.head()
-data.to_csv("segmentationOriginal.csv")
+data.to_csv("segmentationOriginal.csv", index = False)
